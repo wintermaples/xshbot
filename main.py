@@ -75,7 +75,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern(".*", ""),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['tip_rain_room']
+        ['tip_rain_room', 'general', 'chat_room']
     )
 )
 
@@ -117,8 +117,15 @@ cmdManager.commands.append(
     )
 )
 
+cmdManager.commands.append(
+    xshbot.DiscordIDCommand(
+        "getuniqueid",
+        list()
+    )
+)
+
 def connect():
-    client.run('Mzk4MDE2MzIyODI4NjMyMDY2.DS4ZHQ.9TRREWya4i7P8FlLI0YJ6I6YGFw')
+    client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')
 
 while True:
     try:

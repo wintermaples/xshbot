@@ -190,14 +190,20 @@ class RainCommand(Command):
                 return
 
             onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
-            ownerIdListOfWallets = [wallet['name'] for wallet in await APIConnector.list(token) if float(wallet['totalReceived']) >= 5] # ウォレット一覧取得(総入金額が5XSH以上)
+            ownerIdListOfWallets = [wallet['name'] for wallet in await APIConnector.list(token) if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
 
             pricePerOne = amount / len(onlineMembersIdWhoHasWallet)
 
+            import time
+            s = time.time()
+
             await APIConnector.rain(token, message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, 0)
 
             toId = await getIdFromName(message.server, message.author.name)
+
+            e = time.time()
+            print("Elasped Time: %f" % (e - s))
 
             await client.send_message(message.channel,
                                       '<@%s> から"%f XSH"を受け取ったマジ...%d人に"%.04f XSH"ずつあげたマジ...' % (toId, amount, len(onlineMembersIdWhoHasWallet), pricePerOne))
@@ -259,3 +265,12 @@ class DiceRainCommand(Command):
 
     def help(self):
         return ",dicerain (amount) (people num) (border) - 指定された人数に、一人当り(amount)/(people num) XSHを、diceの値が(border)以上の人にプレゼントします。diceででる値は0-100です。最大試行数は"
+
+
+class DiscordIDCommand(Command):
+
+    async def execute(self, args: Sequence[str], client, message: discord.Message):
+        await client.send_message(message.channel, await getIdFromName(message.server, args[0]))
+
+    def help(self):
+        return ",getuniqueid - discordのIDを取得します"
