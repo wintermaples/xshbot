@@ -1,11 +1,11 @@
-import ssl
-
 import aiohttp
 import discord
 import xshbot
 import traceback
+import threading
+from xshbot import APIConnector
 
-client = discord.Client(connector=aiohttp.TCPConnector(verify_ssl=False))
+client = discord.Client()
 
 cmdManager = xshbot.CommandManager(",")
 
@@ -124,8 +124,17 @@ cmdManager.commands.append(
     )
 )
 
+
+# 3/3 rainイベント用のスケジューラー
+from xshbot.special import march_3_rain_event
+rain_event_start_thread = march_3_rain_event.RainEventStartScheduler()
+rain_event_start_thread.start()
+rain_event_thread = march_3_rain_event.RainEventScheduler()
+client.loop.create_task(rain_event_thread.task(client))
+
 def connect():
     client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')
+
 
 while True:
     try:

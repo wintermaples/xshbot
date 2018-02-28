@@ -6,7 +6,7 @@ import enum
 
 apiUrl = "http://192.168.0.30:8000/"
 
-async def _postToAPI(api, params):
+def _postToAPI(api, params):
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -19,8 +19,8 @@ async def _postToAPI(api, params):
 
 class APIConnector:
 
-    async def create(token: str, id: str) -> str:
-        jsondata = await _postToAPI("wallet/create/",
+    def create(token: str, id: str) -> str:
+        jsondata =  _postToAPI("wallet/create/",
             {
                 "token": token,
                 "id": id
@@ -32,8 +32,8 @@ class APIConnector:
         return data["result"]
 
 
-    async def address(token : str, id : str) -> str:
-        jsondata = await _postToAPI("wallet/address/",
+    def address(token : str, id : str) -> str:
+        jsondata =  _postToAPI("wallet/address/",
             {
                 "token": token,
                 "id": id
@@ -46,8 +46,8 @@ class APIConnector:
             return ""
         return data["result"]
 
-    async def tip(token : str, fromId : str, toId : str, amount : float, feePercent: float) -> float:
-        jsondata = await _postToAPI("wallet/tip/",
+    def tip(token : str, fromId : str, toId : str, amount : float, feePercent: float) -> float:
+        jsondata =  _postToAPI("wallet/tip/",
             {
                 "token": token,
                 "from": fromId,
@@ -61,8 +61,8 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return float(data['result'])
 
-    async def send(token : str, fromId : str, toAddr : str, amount : float, feePercent: float) -> float:
-        jsondata = await _postToAPI("wallet/send/",
+    def send(token : str, fromId : str, toAddr : str, amount : float, feePercent: float) -> float:
+        jsondata =  _postToAPI("wallet/send/",
             {
                 "token": token,
                 "from": fromId,
@@ -76,8 +76,8 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return float(data['result'])
 
-    async def balance(token : str, id : str) -> float:
-        jsondata = await _postToAPI("wallet/balance/",
+    def balance(token : str, id : str) -> float:
+        jsondata =  _postToAPI("wallet/balance/",
             {
                 "token": token,
                 "id": id
@@ -88,8 +88,8 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return float(data["result"])
 
-    async def delete(token : str, id : str) -> bool:
-        jsondata = await _postToAPI("wallet/delete/",
+    def delete(token : str, id : str) -> bool:
+        jsondata =  _postToAPI("wallet/delete/",
             {
                 "token": token,
                 "id": id
@@ -100,8 +100,8 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return True
 
-    async def list(token : str):
-        jsondata = await _postToAPI("wallet/list/",
+    def list(token : str):
+        jsondata =  _postToAPI("wallet/list/",
             {
                 "token": token
             }
@@ -111,7 +111,7 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return data["result"]
 
-    async def rain(token : str, id : str, destList : Sequence[str], pricePerOne : float, feePercent: float):
+    def rain(token : str, id : str, destList : Sequence[str], pricePerOne : float, feePercent: float):
         destDic = {'to[%s]' % dest: str(pricePerOne) for dest in destList}
         params = {
                 "token": token,
@@ -120,7 +120,7 @@ class APIConnector:
                 "amount": pricePerOne,
                 "feePercent": feePercent
             }
-        jsondata = await _postToAPI("wallet/rain/", params)
+        jsondata =  _postToAPI("wallet/rain/", params)
         data = json.loads(jsondata)
         if data["status"] != APIConnector.Status.SUCCESS.value:
             raise APIError(data["message"], APIConnector.Status(data['status']))

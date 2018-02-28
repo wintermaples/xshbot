@@ -68,7 +68,7 @@ class CreateCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = await APIConnector.create(token, message.author.id)
+                address = APIConnector.create(token, message.author.id)
                 embed = Embed(description='<@%s>の"XSHアドレス"を作成したマジロ...' % (toId), type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH Address', value=address)
                 embed.set_thumbnail(url='https://api.qrserver.com/v1/create-qr-code/?data=%s' % address)
@@ -85,7 +85,7 @@ class AddressCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = await APIConnector.address(token, message.author.id)
+                address = APIConnector.address(token, message.author.id)
                 if address != "":
                     embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
@@ -105,7 +105,7 @@ class DepositCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = await APIConnector.address(token, message.author.id)
+                address = APIConnector.address(token, message.author.id)
                 if address != "":
                     embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
@@ -126,7 +126,7 @@ class BalanceCommand(Command):
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
                 priceJPY = await current_price_jpy()
-                balance = await APIConnector.balance(token, message.author.id)
+                balance = APIConnector.balance(token, message.author.id)
                 embed = Embed(description='<@%s>の"所持XSH数"を表示するマジロ...。' % (toId), type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH所持数', value='%.08f XSH' % balance, inline=True)
                 embed.add_field(name='日本円換算', value='%0.04f 円' % (priceJPY * balance), inline=True)
@@ -145,7 +145,7 @@ class WithdrawCommand(Command):
                 await client.send_message(message.channel, "引き出しは1XSHからマジ...")
                 return
             feePercent = 0.1 / float(args[1]) if float(args[1]) * 0.05 / 100 < 0.1 else 0.05 / 100
-            amount = await APIConnector.send(token, message.author.id, args[0], float(args[1]), feePercent)
+            amount = APIConnector.send(token, message.author.id, args[0], float(args[1]), feePercent)
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
                 await mention(client, message.channel, message.author.name,
@@ -164,10 +164,12 @@ class TipCommand(Command):
             destId = await getIdFromName(message.server, args[0])
             if args[0].upper() == 'DONATE':
                 destId = 'DONATE'
+            if args[0].upper() == 'RAIN_WALLET':
+                destId = 'RAIN_WALLET'
             if destId != "":
                 if toId != "":
                     feePercent = 0.002 / 100
-                    await APIConnector.tip(token, message.author.id, destId, float(args[1]), feePercent)
+                    APIConnector.tip(token, message.author.id, destId, float(args[1]), feePercent)
                     await mention(client, message.channel, message.author.name,
                                   'から<@%s>に"%f XSH"送金したマジ...(手数料: %f％)' % (destId, float(args[1]), feePercent * 100))
             else:
@@ -185,12 +187,12 @@ class RainCommand(Command):
             amount = float(args[0])
             if not await self.balanceIsMoreThan(message.author.id, amount):
                 await client.send_message(message.channel,
-                                          '所持"XSH"が足りないマジ...。残高は%fマジよ...' % await APIConnector.balance(token,
+                                          '所持"XSH"が足りないマジ...。残高は%fマジよ...' % APIConnector.balance(token,
                                                                                                     message.author.id))
                 return
 
             onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
-            ownerIdListOfWallets = [wallet['name'] for wallet in await APIConnector.list(token) if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
+            ownerIdListOfWallets = [wallet['name'] for wallet in APIConnector.list(token) if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
 
             pricePerOne = amount / len(onlineMembersIdWhoHasWallet)
@@ -198,7 +200,7 @@ class RainCommand(Command):
             import time
             s = time.time()
 
-            await APIConnector.rain(token, message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, 0)
+            APIConnector.rain(token, message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, 0)
 
             toId = await getIdFromName(message.server, message.author.name)
 
@@ -211,7 +213,7 @@ class RainCommand(Command):
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
     async def balanceIsMoreThan(self, id: str, amount: float):
-        if (await APIConnector.balance(token, id)) >= amount:
+        if (APIConnector.balance(token, id)) >= amount:
             return True
         return False
 
