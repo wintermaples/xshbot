@@ -28,7 +28,7 @@ cmdManager.commands.append(
     xshbot.CreateCommand(
         "register",
         [],
-        ['register_room']
+        ['register（ウォレット作成）']
     )
 )
 
@@ -37,7 +37,7 @@ cmdManager.commands.append(
     xshbot.AddressCommand(
         "address",
         [],
-        ['address_deposit_room']
+        ['address_deposit（アドレス確認・入金）']
     )
 )
 
@@ -45,7 +45,7 @@ cmdManager.commands.append(
     xshbot.DepositCommand(
         "deposit",
         [],
-        ['address_deposit_room']
+        ['address_deposit（アドレス確認・入金）']
     )
 )
 
@@ -53,7 +53,7 @@ cmdManager.commands.append(
     xshbot.BalanceCommand(
         "balance",
         [],
-        ['balance_withdraw_room']
+        ['address_deposit（アドレス確認・入金）']
     )
 )
 
@@ -64,7 +64,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern("S[a-zA-Z0-9]{23}", "アドレスの形式が不正です!"),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['balance_withdraw_room']
+        ['address_deposit（アドレス確認・入金）']
     )
 )
 
@@ -75,7 +75,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern(".*", ""),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['tip_rain_room', 'general', 'chat_room']
+        ['イベントルーム', 'general', '雑談部屋']
     )
 )
 
@@ -85,7 +85,7 @@ cmdManager.commands.append(
         [
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['tip_rain_room', 'general', 'chat_room']
+        ['イベントルーム', 'general', '雑談部屋']
     )
 )
 
@@ -113,7 +113,7 @@ cmdManager.commands.append(
         [
             xshbot.PositiveNumberArgsPattern(numberOfArgs_=-1)
         ],
-        ['shield_bot']
+        ['info（価格確認）']
     )
 )
 
