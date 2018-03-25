@@ -4,6 +4,7 @@ import xshbot
 import traceback
 import threading
 from xshbot import APIConnector
+from xshbot.community_event.march_31_fullmoon_party import fullmoon_party
 
 client = discord.Client()
 
@@ -28,7 +29,7 @@ cmdManager.commands.append(
     xshbot.CreateCommand(
         "register",
         [],
-        ['register（ウォレット作成）']
+        ['ウォレット作成（register）']
     )
 )
 
@@ -37,7 +38,7 @@ cmdManager.commands.append(
     xshbot.AddressCommand(
         "address",
         [],
-        ['address_deposit（アドレス確認・入金）']
+        ['アドレス確認・入金（address_deposit）']
     )
 )
 
@@ -45,7 +46,7 @@ cmdManager.commands.append(
     xshbot.DepositCommand(
         "deposit",
         [],
-        ['address_deposit（アドレス確認・入金）']
+        ['アドレス確認・入金（address_deposit）']
     )
 )
 
@@ -53,7 +54,7 @@ cmdManager.commands.append(
     xshbot.BalanceCommand(
         "balance",
         [],
-        ['address_deposit（アドレス確認・入金）']
+        ['残高確認・出金（balance_withdraw）']
     )
 )
 
@@ -64,7 +65,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern("S[a-zA-Z0-9]{23}", "アドレスの形式が不正です!"),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['address_deposit（アドレス確認・入金）']
+        ['残高確認・出金（balance_withdraw）']
     )
 )
 
@@ -75,7 +76,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern(".*", ""),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['イベントルーム', 'general', '雑談部屋']
+        ['イベントルーム', 'general', '雑談部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
     )
 )
 
@@ -85,7 +86,7 @@ cmdManager.commands.append(
         [
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['イベントルーム', 'general', '雑談部屋']
+        ['イベントルーム', 'general', '雑談部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
     )
 )
 
@@ -113,7 +114,7 @@ cmdManager.commands.append(
         [
             xshbot.PositiveNumberArgsPattern(numberOfArgs_=-1)
         ],
-        ['info（価格確認）']
+        ['価格確認（info）']
     )
 )
 
@@ -123,6 +124,8 @@ cmdManager.commands.append(
         list()
     )
 )
+
+fullmoon_party_instance = fullmoon_party.FullMoonParty(client)
 
 def connect():
     client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')
