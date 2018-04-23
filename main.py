@@ -76,7 +76,7 @@ cmdManager.commands.append(
             xshbot.RegexArgsPattern(".*", ""),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['イベントルーム', 'general', '雑談部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
+        ['イベントルーム', 'xshトーク部屋', 'フリートーク部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
     )
 )
 
@@ -86,7 +86,7 @@ cmdManager.commands.append(
         [
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['イベントルーム', 'general', '雑談部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
+        ['イベントルーム', 'xshトーク部屋', 'フリートーク部屋', '技術部屋','トレード部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ',]
     )
 )
 
@@ -124,8 +124,6 @@ cmdManager.commands.append(
         list()
     )
 )
-
-fullmoon_party_instance = fullmoon_party.FullMoonParty(client)
 
 def connect():
     client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')

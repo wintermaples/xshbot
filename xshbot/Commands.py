@@ -149,7 +149,7 @@ class WithdrawCommand(Command):
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
                 await mention(client, message.channel, message.author.name,
-                              '"%s"に"%f XSH"した送金マジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)' % (args[0], amount, float(args[1]) - amount))
+                              '"%s"に"%f XSH"送金したマジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)' % (args[0], amount, float(args[1]) - amount))
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
@@ -185,6 +185,10 @@ class RainCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
             amount = float(args[0])
+            if amount < 0.05:
+                await client.send_message(message.channel,
+                                          'こんなんじゃうまく雨が降らないマジ... 0.05XSH以上は欲しいマジよ...')
+                return
             if not await self.balanceIsMoreThan(message.author.id, amount):
                 await client.send_message(message.channel,
                                           '所持"XSH"が足りないマジ...。残高は%fマジよ...' % APIConnector.balance(token,
