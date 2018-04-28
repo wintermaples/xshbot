@@ -11,6 +11,7 @@ from .APIConnector import *
 from .CmdPatterns import CommandLengthDoesntMatchException, ArgsPatternPart
 from .FXCalculator import *
 from Translator import *
+import re
 
 token = open('GRIMapi_token.txt').readline()
 docomo_api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY="
@@ -31,16 +32,12 @@ class Command(metaclass=ABCMeta):
     def help(self) -> str:
         raise NotImplementedError()
 
-    def isMatch(self, cmdStr: str) -> bool:
-        cmdSplited = cmdStr.split(" ")
-        if len(cmdSplited) == 0:
+    def isMatch(self, prefix: str, cmdLabel: str, args: Sequence[str]) -> bool:
+        if len(args) == 0:
             raise AssertionError()
 
-        cmdLabel = cmdSplited[0]
         if cmdLabel != self.cmdLabel:
             return False
-
-        args = cmdSplited[1:]
 
         if len(args) < self.requiredNumberOfArgs():
             raise CommandLengthDoesntMatchException(self.requiredNumberOfArgs(), self.help())
@@ -158,16 +155,25 @@ class WithdrawCommand(Command):
 
 
 class TipCommand(Command):
+
+    def __parse_id(self, message: str):
+        regex = re.compile(r'\<@([0-9]*)\>')
+        if not regex.match(message):
+            return ''
+
+        return regex.search(message).group(1)
+
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            toId = await getIdFromName(message.server, message.author.name)
-            destId = await getIdFromName(message.server, args[0])
+            fromId = message.author.id
+            destId = self.__parse_id(args[0])
             if args[0].upper() == 'DONATE':
                 destId = 'DONATE'
             if args[0].upper() == 'RAIN_WALLET':
                 destId = 'RAIN_WALLET'
+
             if destId != "":
-                if toId != "":
+                if fromId != "":
                     feePercent = 0.002 / 100
                     APIConnector.tip(token, message.author.id, destId, float(args[1]), feePercent)
                     await mention(client, message.channel, message.author.name,
@@ -179,6 +185,7 @@ class TipCommand(Command):
 
     def help(self):
         return ",tip (toName) (amount) - 指定した金額だけ、指定した名前の人にXSHを送金します"
+
 
 
 class RainCommand(Command):
