@@ -131,57 +131,15 @@ class APIConnector:
         INSUFFICIENT_FUNDS = 'G-4'
         NEGATIVE_VALUE_SPECIFIED = 'G-5'
         AMOUNT_TOO_SMALL = 'G-6'
+        FORBIDDEN = 'G-7'
+        SYSTEM_ALREADY_STOPPED = 'G-100'
+        TOO_MANY_TXS = 'G-8'
+        MANAGER_NOT_FOUND = 'G-9'
+        PERMISSION_NOT_FOUND = 'G-10'
+
 
 class APIError(Exception):
 
     def __init__(self, message : str, status : APIConnector.Status):
         self.message = message
         self.status = status
-
-#import random
-#import discord
-#import time
-#online = list()
-#offline = list()
-#allMembers = list()
-#for i in range(0, 100000):
-#    online.append(discord.Member(
-#        user={
-#        'id': random.randrange(0, 1000000000000),
-#        'status': discord.Status.online,
-#            'voice_state': discord.VoiceState.voice_channel
-#        }
-#    ))
-#
-#for j in range(0, 200000):
-#    online.append(discord.Member(
-#        user={
-#        'id': random.randrange(0, 1000000000000),
-#        'status': discord.Status.online,
-#            'voice_state': discord.VoiceState.voice_channel
-#        }
-#    ))
-#
-#
-#allMembers.extend(online)
-#allMembers.extend(offline)
-#
-#walletHave = online[0:75000]
-#
-#start = time.time()
-#for k in range(0, 1000):
-#    onlineMembersId = [member.id for member in allMembers if
-#                       member.status == discord.Status.online and not member.is_afk]  # オンラインの人のID取得
-#    ownerIdListOfWallets = [wallet.id for wallet in walletHave]  # ウォレット一覧取得
-#    onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if
-#                                   memberId in ownerIdListOfWallets]  # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
-#
-#    destDic = {'to[%s]' % dest: str(1) for dest in onlineMembersIdWhoHasWallet}
-#    params = {
-#        "token": 'aueo',
-#        "from": id
-#    }
-#    params.update(destDic)
-#
-#elasptedTime = time.time() - start
-#print(elasptedTime)
