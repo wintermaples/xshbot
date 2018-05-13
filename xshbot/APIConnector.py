@@ -3,27 +3,32 @@ from urllib import request
 from urllib import parse
 import json
 import enum
+from decimal import *
 
-apiUrl = "http://192.168.0.30:8000/"
-
-def _postToAPI(api, params):
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    params = parse.urlencode({'data': params}).encode("utf-8")
-
-    req = request.Request(apiUrl + api, data=params, method="POST")
-    with request.urlopen(req) as response:
-        response_body = response.read().decode("utf-8")
-        return response_body
 
 class APIConnector:
 
-    def create(token: str, id: str) -> str:
-        jsondata =  _postToAPI("wallet/create/",
+    def __init__(self, api_url, token):
+        self.api_url = api_url
+        self.token = token
+
+    def __post_to_api(self, api, params):
+        params = parse.urlencode(
             {
-                "token": token,
-                "id": id
+                'token': self.token,
+                'data': json.dumps(params)
+            }
+        ).encode("utf-8")
+
+        req = request.Request(self.api_url + api, data=params, method="POST")
+        with request.urlopen(req) as response:
+            response_body = response.read().decode("utf-8")
+            return response_body
+
+    def create(self, name: str) -> str:
+        jsondata = self.__post_to_api("wallet/create/",
+            {
+                "name": name
             }
         )
         data = json.loads(jsondata)
@@ -31,12 +36,10 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return data["result"]
 
-
-    def address(token : str, id : str) -> str:
-        jsondata =  _postToAPI("wallet/address/",
+    def address(self, name: str) -> str:
+        jsondata = self.__post_to_api("wallet/address/",
             {
-                "token": token,
-                "id": id
+                "name": name
             }
         )
         data = json.loads(jsondata)
@@ -46,41 +49,38 @@ class APIConnector:
             return ""
         return data["result"]
 
-    def tip(token : str, fromId : str, toId : str, amount : float, feePercent: float) -> float:
-        jsondata =  _postToAPI("wallet/tip/",
+    def tip(self, from_name: str, to_name: str, amount: Decimal, fee_percent: Decimal) -> Decimal:
+        jsondata = self.__post_to_api("wallet/tip/",
             {
-                "token": token,
-                "from": fromId,
-                "to": toId,
-                "amount": amount,
-                "feePercent": feePercent
+                "from": from_name,
+                "to": to_name,
+                "amount": str(amount),
+                "feePercent": str(fee_percent)
             }
         )
         data = json.loads(jsondata)
         if data["status"] != APIConnector.Status.SUCCESS.value:
             raise APIError(data["message"], APIConnector.Status(data['status']))
-        return float(data['result'])
+        return Decimal(data['result'])
 
-    def send(token : str, fromId : str, toAddr : str, amount : float, feePercent: float) -> float:
-        jsondata =  _postToAPI("wallet/send/",
+    def send(self, from_name: str, to_addr: str, amount: Decimal, fee_percent: Decimal) -> Decimal:
+        jsondata = self.__post_to_api("wallet/send/",
             {
-                "token": token,
-                "from": fromId,
-                "to": toAddr,
-                "amount": amount,
-                "feePercent": feePercent
+                "from": from_name,
+                "to": to_addr,
+                "amount": str(amount),
+                "feePercent": str(fee_percent)
             }
         )
         data = json.loads(jsondata)
         if data["status"] != APIConnector.Status.SUCCESS.value:
             raise APIError(data["message"], APIConnector.Status(data['status']))
-        return float(data['result'])
+        return Decimal(data['result'])
 
-    def balance(token : str, id : str) -> float:
-        jsondata =  _postToAPI("wallet/balance/",
+    def balance(self, name: str) -> float:
+        jsondata = self.__post_to_api("wallet/balance/",
             {
-                "token": token,
-                "id": id
+                "name": name
             }
         )
         data = json.loads(jsondata)
@@ -88,11 +88,10 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return float(data["result"])
 
-    def delete(token : str, id : str) -> bool:
-        jsondata =  _postToAPI("wallet/delete/",
+    def delete(self, name: str) -> bool:
+        jsondata = self.__post_to_api("wallet/delete/",
             {
-                "token": token,
-                "id": id
+                "name": name
             }
         )
         data = json.loads(jsondata)
@@ -100,10 +99,9 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return True
 
-    def list(token : str):
-        jsondata =  _postToAPI("wallet/list/",
+    def list(self):
+        jsondata = self.__post_to_api("wallet/list/",
             {
-                "token": token
             }
         )
         data = json.loads(jsondata)
@@ -111,16 +109,14 @@ class APIConnector:
             raise APIError(data["message"], APIConnector.Status(data['status']))
         return data["result"]
 
-    def rain(token : str, id : str, destList : Sequence[str], pricePerOne : float, feePercent: float):
-        destDic = {'to[%s]' % dest: str(pricePerOne) for dest in destList}
+    def rain(self, name: str, dest_list: Sequence[str], price_per_one: Decimal, fee_percent: Decimal):
         params = {
-                "token": token,
-                "from": id,
-                "to": destList,
-                "amount": pricePerOne,
-                "feePercent": feePercent
+                "from": name,
+                "to": dest_list,
+                "amount": str(price_per_one),
+                "feePercent": str(price_per_one)
             }
-        jsondata =  _postToAPI("wallet/rain/", params)
+        jsondata =  self.__post_to_api("wallet/rain/", params)
         data = json.loads(jsondata)
         if data["status"] != APIConnector.Status.SUCCESS.value:
             raise APIError(data["message"], APIConnector.Status(data['status']))

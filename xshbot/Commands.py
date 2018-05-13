@@ -13,10 +13,9 @@ from .FXCalculator import *
 from Translator import *
 import re
 
-token = open('GRIMapi_token.txt').readline()
-docomo_api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY="
-docomo_api_key = open('docomoapi_token.txt').readline()
-
+api_url = 'http://arbor.shieldcurrency.jp/'
+token = open('SHIELDdConnectorAPIToken.txt').readline()
+connector = APIConnector(api_url, token)
 
 class Command(metaclass=ABCMeta):
     def __init__(self, cmdLabel: str, argsPatternParts: Sequence[ArgsPatternPart], roomList : Sequence[str] = None):
@@ -32,15 +31,15 @@ class Command(metaclass=ABCMeta):
     def help(self) -> str:
         raise NotImplementedError()
 
-    def isMatch(self, prefix: str, cmdLabel: str, args: Sequence[str]) -> bool:
-        if len(args) == 0:
-            raise AssertionError()
+    def is_match(self, prefix: str, cmdLabel: str, args: Sequence[str]) -> bool:
+        if cmdLabel == '':
+            return False
 
         if cmdLabel != self.cmdLabel:
             return False
 
-        if len(args) < self.requiredNumberOfArgs():
-            raise CommandLengthDoesntMatchException(self.requiredNumberOfArgs(), self.help())
+        if len(args) < self.required_number_of_args():
+            raise CommandLengthDoesntMatchException(self.required_number_of_args(), self.help())
 
         index = 0
         for argsPattern in self.argsPatternParts:
@@ -52,7 +51,7 @@ class Command(metaclass=ABCMeta):
 
         return True
 
-    def requiredNumberOfArgs(self) -> int:
+    def required_number_of_args(self) -> int:
         sum = 0
         for argsPattern in self.argsPatternParts:
             if argsPattern.numberOfArgs() != -1:
@@ -65,7 +64,7 @@ class CreateCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = APIConnector.create(token, message.author.id)
+                address = connector.create(message.author.id)
                 embed = Embed(description='<@%s>の"XSHアドレス"を作成したマジロ...' % (toId), type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH Address', value=address)
                 embed.set_thumbnail(url='https://api.qrserver.com/v1/create-qr-code/?data=%s' % address)
@@ -82,7 +81,7 @@ class AddressCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = APIConnector.address(token, message.author.id)
+                address = connector.address(message.author.id)
                 if address != "":
                     embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
@@ -102,7 +101,7 @@ class DepositCommand(Command):
         try:
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
-                address = APIConnector.address(token, message.author.id)
+                address = connector.address(message.author.id)
                 if address != "":
                     embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
@@ -123,7 +122,7 @@ class BalanceCommand(Command):
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
                 priceJPY = await current_price_jpy()
-                balance = APIConnector.balance(token, message.author.id)
+                balance = connector.balance(message.author.id)
                 embed = Embed(description='<@%s>の"所持XSH数"を表示するマジロ...。' % (toId), type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH所持数', value='%.08f XSH' % balance, inline=True)
                 embed.add_field(name='日本円換算', value='%0.04f 円' % (priceJPY * balance), inline=True)
@@ -141,12 +140,12 @@ class WithdrawCommand(Command):
             if float(args[1]) < 1:
                 await client.send_message(message.channel, "引き出しは1XSHからマジ...")
                 return
-            feePercent = 0.1 / float(args[1]) if float(args[1]) * 0.05 / 100 < 0.1 else 0.05 / 100
-            amount = APIConnector.send(token, message.author.id, args[0], float(args[1]), feePercent)
+            feePercent = Decimal(0.1) / Decimal(args[1]) if Decimal(args[1]) * Decimal('0.05') / Decimal(100) < Decimal('0.1') else Decimal('0.05') / Decimal(100)
+            amount = connector.send(message.author.id, args[0], Decimal(args[1]), feePercent)
             toId = await getIdFromName(message.server, message.author.name)
             if toId != "":
                 await mention(client, message.channel, message.author.name,
-                              '"%s"に"%f XSH"送金したマジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)' % (args[0], amount, float(args[1]) - amount))
+                              '"%s"に"%f XSH"送金したマジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)' % (args[0], float(amount), float(Decimal(args[1]) - amount)))
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
@@ -157,7 +156,7 @@ class WithdrawCommand(Command):
 class TipCommand(Command):
 
     def __parse_id(self, message: str):
-        regex = re.compile(r'\<@([0-9]*)\>')
+        regex = re.compile(r'\<@\!*([0-9]*)\>')
         if not regex.match(message):
             return ''
 
@@ -167,15 +166,15 @@ class TipCommand(Command):
         try:
             fromId = message.author.id
             destId = self.__parse_id(args[0])
-            if args[0].upper() == 'DONATE':
+            if args[0].upper() == 'DONATE' or destId == '413715025178525706':
                 destId = 'DONATE'
             if args[0].upper() == 'RAIN_WALLET':
                 destId = 'RAIN_WALLET'
 
             if destId != "":
                 if fromId != "":
-                    feePercent = 0.002 / 100
-                    APIConnector.tip(token, message.author.id, destId, float(args[1]), feePercent)
+                    feePercent = Decimal('0.002') / Decimal(100)
+                    connector.tip(message.author.id, destId, Decimal(args[1]), feePercent)
                     await mention(client, message.channel, message.author.name,
                                   'から<@%s>に"%f XSH"送金したマジ...(手数料: %f％)' % (destId, float(args[1]), feePercent * 100))
             else:
@@ -198,20 +197,19 @@ class RainCommand(Command):
                 return
             if not await self.balanceIsMoreThan(message.author.id, amount):
                 await client.send_message(message.channel,
-                                          '所持"XSH"が足りないマジ...。残高は%fマジよ...' % APIConnector.balance(token,
-                                                                                                    message.author.id))
+                                          '所持"XSH"が足りないマジ...。残高は%fマジよ...' % connector.balance(message.author.id))
                 return
 
             onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
-            ownerIdListOfWallets = [wallet['name'] for wallet in APIConnector.list(token) if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
+            ownerIdListOfWallets = [wallet['name'] for wallet in connector.list() if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
 
-            pricePerOne = amount / len(onlineMembersIdWhoHasWallet)
+            pricePerOne = Decimal(amount) / Decimal(len(onlineMembersIdWhoHasWallet))
 
             import time
             s = time.time()
 
-            APIConnector.rain(token, message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, 0)
+            connector.rain(message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, Decimal(0))
 
             toId = await getIdFromName(message.server, message.author.name)
 
@@ -224,7 +222,7 @@ class RainCommand(Command):
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
     async def balanceIsMoreThan(self, id: str, amount: float):
-        if (APIConnector.balance(token, id)) >= amount:
+        if (connector.balance(id)) >= amount:
             return True
         return False
 
@@ -238,12 +236,31 @@ class InfoCommand(Command):
         price = await current_price_jpy()
         priceBTC = await current_price_btc()
         embed = Embed(type='rich', colour=0xF7D358)
-        embed.add_field(name="XSH/BTC", value="%.08f BTC" % priceBTC, inline=True)
-        embed.add_field(name="XSH/JPY", value="%.08f JPY" % price, inline=True)
+        embed.add_field(name="BTC/XSH", value="%.08f BTC/XSH" % priceBTC, inline=True)
+        embed.add_field(name="JPY/XSH", value="%.08f JPY/XSH" % price, inline=True)
         if amount != 1:
             embed.add_field(name="ㅤ", value="ㅤ", inline=False)
-            embed.add_field(name="%.04f XSH/BTC" % amount, value="%.08f BTC" % (priceBTC * amount), inline=True)
-            embed.add_field(name="%.04f XSH/JPY" % amount, value="%.08f JPY" % (price * amount), inline=True)
+            embed.add_field(name="%.04f BTC/XSH" % amount, value="%.08f BTC/XSH" % (priceBTC * amount), inline=True)
+            embed.add_field(name="%.04f JPY/XSH" % amount, value="%.08f JPY/XSH" % (price * amount), inline=True)
+        embed.set_footer(text='https://coinmarketcap.com/currencies/shield-xsh/')
+        embed.set_thumbnail(
+            url='http://files.coinmarketcap.com.s3-website-us-east-1.amazonaws.com/static/img/coins/200x200/shield-xsh.png')
+        await client.send_message(message.channel, embed=embed)
+
+    def help(self):
+        return ",info [amount] - 現在のSHIELDの価格を表示します"
+
+
+class HowMuchCommand(Command):
+    async def execute(self, args: Sequence[str], client, message: discord.Message):
+        amount = float(args[0]) if len(args) > 0 else 1
+        price = await current_price_jpy()
+        priceBTC = await current_price_btc()
+        embed = Embed(type='rich', colour=0xF7D358)
+        embed.add_field(name="XSH/JPY", value="%.08f XSH/1 JPY" % (1 / price), inline=True)
+        if amount != 1:
+            embed.add_field(name="ㅤ", value="ㅤ", inline=False)
+            embed.add_field(name="How Much?", value="%.04f XSH/%.04f JPY" % ( ((1/price) * amount), amount ), inline=True)
         embed.set_footer(text='https://coinmarketcap.com/currencies/shield-xsh/')
         embed.set_thumbnail(
             url='http://files.coinmarketcap.com.s3-website-us-east-1.amazonaws.com/static/img/coins/200x200/shield-xsh.png')

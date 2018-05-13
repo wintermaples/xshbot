@@ -15,19 +15,19 @@ class CommandManager():
         if self.cmdPrefix != prefix:
             return False
 
-        # 空文字の引数は消去
         cmdStrWithoutPrefix = cmdStr[1:]
         splitedCmdStr = cmdStrWithoutPrefix.split(' ')
         cmdLabel = splitedCmdStr[0]
         args = splitedCmdStr[1:]
+        # 空文字の引数は消去
         args = list(filter(
             lambda arg: arg != '',
             args
         ))
         for command in self.commands:
             if command.roomList is not None and not message.channel.name in command.roomList:
-                continue
-            if command.isMatch(prefix, cmdLabel, args):
+               continue
+            if command.is_match(prefix, cmdLabel, args):
                 print("Executed %s command." % command.cmdLabel)
                 await command.execute(args, client, message)
                 return True
