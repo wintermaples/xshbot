@@ -138,11 +138,6 @@ cmdManager.commands.append(
     )
 )
 
-
-def connect():
-    client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')
-
-
 @client.event
 async def on_socket_raw_receive(msg):
     try:
@@ -215,8 +210,4 @@ async def on_socket_raw_receive(msg):
 
 # fullmoon_party_instance = fullmoon_party.FullMoonParty(client)
 
-while True:
-    try:
-        connect()
-    except:
-        connect()
+client.run('NDEzNzE1MDI1MTc4NTI1NzA2.DWc1rA.RfzqO-pkM0v98BVrlb6FAWOAao8')

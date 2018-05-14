@@ -186,8 +186,14 @@ class TipCommand(Command):
         return ",tip (toName) (amount) - 指定した金額だけ、指定した名前の人にXSHを送金します"
 
 
-
 class RainCommand(Command):
+
+    def __init__(self, cmdLabel: str, argsPatternParts: Sequence[ArgsPatternPart], roomList : Sequence[str] = None):
+        super().__init__(cmdLabel, argsPatternParts, roomList)
+        self.last_fetched: datetime = None
+        self.wallet_list = None
+        self.fetching_interval = 300
+
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
             amount = float(args[0])
@@ -195,36 +201,43 @@ class RainCommand(Command):
                 await client.send_message(message.channel,
                                           'こんなんじゃうまく雨が降らないマジ... 0.05XSH以上は欲しいマジよ...')
                 return
-            if not await self.balanceIsMoreThan(message.author.id, amount):
+
+            if not await self.balance_is_more_than(message.author.id, amount):
                 await client.send_message(message.channel,
                                           '所持"XSH"が足りないマジ...。残高は%fマジよ...' % connector.balance(message.author.id))
                 return
 
             onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
-            ownerIdListOfWallets = [wallet['name'] for wallet in connector.list() if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
+            ownerIdListOfWallets = [wallet['name'] for wallet in self.get_wallet_list() if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
 
             pricePerOne = Decimal(amount) / Decimal(len(onlineMembersIdWhoHasWallet))
-
-            import time
-            s = time.time()
-
             connector.rain(message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, Decimal(0))
-
             toId = await getIdFromName(message.server, message.author.name)
-
-            e = time.time()
-            print("Elasped Time: %f" % (e - s))
 
             await client.send_message(message.channel,
                                       '<@%s> から"%f XSH"を受け取ったマジ...%d人に"%.04f XSH"ずつあげたマジ...' % (toId, amount, len(onlineMembersIdWhoHasWallet), pricePerOne))
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
-    async def balanceIsMoreThan(self, id: str, amount: float):
+    async def balance_is_more_than(self, id: str, amount: float):
         if (connector.balance(id)) >= amount:
             return True
         return False
+
+    def get_wallet_list(self):
+        if self.last_fetched is not None:
+            delta: float = time.time() - self.last_fetched
+            if delta > self.fetching_interval:
+                self.wallet_list = connector.list()
+                self.last_fetched = time.time()
+                return self.wallet_list
+            else:
+                return self.wallet_list
+        else:
+            self.wallet_list = connector.list()
+            self.last_fetched = time.time()
+            return self.wallet_list
 
     def help(self):
         return ",rain (amount) - オンラインの人に指定した数量だけXSHを均等配分します"
