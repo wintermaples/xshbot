@@ -214,7 +214,9 @@ class RainCommand(Command):
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
 
             if number_of_people > 0:
-                onlineMembersIdWhoHasWallet = random.sample(onlineMembersIdWhoHasWallet, number_of_people)
+                onlineMembersIdWhoHasWallet = random.sample(
+                    min([len(onlineMembersIdWhoHasWallet), number_of_people]),
+                    number_of_people)
 
             pricePerOne = Decimal(amount) / Decimal(len(onlineMembersIdWhoHasWallet))
             connector.rain(message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, Decimal(0))
