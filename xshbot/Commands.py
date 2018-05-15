@@ -12,6 +12,7 @@ from .CmdPatterns import CommandLengthDoesntMatchException, ArgsPatternPart
 from .FXCalculator import *
 from Translator import *
 import re
+import random
 
 api_url = 'http://arbor.shieldcurrency.jp/'
 token = open('SHIELDdConnectorAPIToken.txt').readline()
@@ -197,6 +198,7 @@ class RainCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
             amount = float(args[0])
+            number_of_people = int(args[1]) if len(args) >= 2 else -1
             if amount < 0.05:
                 await client.send_message(message.channel,
                                           'こんなんじゃうまく雨が降らないマジ... 0.05XSH以上は欲しいマジよ...')
@@ -210,6 +212,9 @@ class RainCommand(Command):
             onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
             ownerIdListOfWallets = [wallet['name'] for wallet in self.get_wallet_list() if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
             onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
+
+            if number_of_people > 0:
+                onlineMembersIdWhoHasWallet = random.sample(onlineMembersIdWhoHasWallet, number_of_people)
 
             pricePerOne = Decimal(amount) / Decimal(len(onlineMembersIdWhoHasWallet))
             connector.rain(message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, Decimal(0))
@@ -240,7 +245,7 @@ class RainCommand(Command):
             return self.wallet_list
 
     def help(self):
-        return ",rain (amount) - オンラインの人に指定した数量だけXSHを均等配分します"
+        return ",rain (amount) [number_of_people] - オンラインの人に指定した数量だけXSHを均等配分します"
 
 
 class InfoCommand(Command):
@@ -313,7 +318,14 @@ class DiceRainCommand(Command):
 class DiscordIDCommand(Command):
 
     async def execute(self, args: Sequence[str], client, message: discord.Message):
-        await client.send_message(message.channel, await getIdFromName(message.server, args[0]))
+        def __parse_id(message: str):
+            regex = re.compile(r'\<@\!*([0-9]*)\>')
+            if not regex.match(message):
+                return ''
+
+            return regex.search(message).group(1)
+
+        await client.send_message(message.channel, __parse_id(args[0]))
 
     def help(self):
         return ",getuniqueid - discordのIDを取得します"
