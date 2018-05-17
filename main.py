@@ -24,7 +24,7 @@ async def on_message(message: discord.Message):
             await client.send_message(message.channel, ex.message)
         except xshbot.CommandLengthDoesntMatchException as ex:
             await client.send_message(message.channel, str(ex))
-            await client.send_message(message.channel, "HELP: " + ex.help)
+            await client.send_message(message.channel, "HELP: " + ex.help_message)
     except Exception:
         print(traceback.format_exc())
 
@@ -87,7 +87,8 @@ cmdManager.commands.append(
     xshbot.RainCommand(
         "rain",
         [
-            xshbot.PositiveNumberArgsPattern()
+            xshbot.PositiveNumberArgsPattern(),
+            xshbot.PositiveNumberArgsPattern(number_of_args_=-1)
         ],
         ['イベントルーム', 'xshトーク部屋', 'フリートーク部屋', '技術部屋','チャート部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ','居酒屋しぃるど',]
     )
@@ -115,7 +116,7 @@ cmdManager.commands.append(
     xshbot.InfoCommand(
         "info",
         [
-            xshbot.PositiveNumberArgsPattern(numberOfArgs_=-1)
+            xshbot.PositiveNumberArgsPattern(number_of_args_=-1)
         ],
         ['価格確認（info）']
     )
@@ -125,7 +126,7 @@ cmdManager.commands.append(
     xshbot.HowMuchCommand(
         "howmuch",
         [
-            xshbot.PositiveNumberArgsPattern(numberOfArgs_=1)
+            xshbot.PositiveNumberArgsPattern(number_of_args_=1)
         ],
         None
     )
@@ -137,6 +138,7 @@ cmdManager.commands.append(
         list()
     )
 )
+
 
 @client.event
 async def on_socket_raw_receive(msg):

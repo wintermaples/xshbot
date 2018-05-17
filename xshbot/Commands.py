@@ -1,28 +1,27 @@
-import json
+import random
+import re
 from abc import abstractmethod, ABCMeta
 
-import discord
-import requests
-from DiscordUtil import *
-from XSHUtil import *
 from discord.embeds import *
 
+from DiscordUtil import *
+from Translator import *
+from XSHUtil import *
 from .APIConnector import *
 from .CmdPatterns import CommandLengthDoesntMatchException, ArgsPatternPart
-from .FXCalculator import *
-from Translator import *
-import re
-import random
 
 api_url = 'http://arbor.shieldcurrency.jp/'
 token = open('SHIELDdConnectorAPIToken.txt').readline()
 connector = APIConnector(api_url, token)
+xsh_thumbnail = 'http://files.coinmarketcap.com.s3-website-us-east-1.amazonaws.com' \
+                '/static/img/coins/200x200/shield-xsh.png'
+
 
 class Command(metaclass=ABCMeta):
-    def __init__(self, cmdLabel: str, argsPatternParts: Sequence[ArgsPatternPart], roomList : Sequence[str] = None):
-        self.cmdLabel = cmdLabel
-        self.argsPatternParts = argsPatternParts
-        self.roomList = roomList
+    def __init__(self, cmd_label: str, arg_pattern_parts: Sequence[ArgsPatternPart], room_list: Sequence[str] = None):
+        self.cmd_label = cmd_label
+        self.args_pattern_parts = arg_pattern_parts
+        self.room_list = room_list
 
     @abstractmethod
     async def execute(self, args: Sequence[str], client, message: discord.Message):
@@ -32,41 +31,41 @@ class Command(metaclass=ABCMeta):
     def help(self) -> str:
         raise NotImplementedError()
 
-    def is_match(self, prefix: str, cmdLabel: str, args: Sequence[str]) -> bool:
-        if cmdLabel == '':
+    def is_match(self, cmd_label: str, args: Sequence[str]) -> bool:
+        if cmd_label == '':
             return False
 
-        if cmdLabel != self.cmdLabel:
+        if cmd_label != self.cmd_label:
             return False
 
         if len(args) < self.required_number_of_args():
             raise CommandLengthDoesntMatchException(self.required_number_of_args(), self.help())
 
         index = 0
-        for argsPattern in self.argsPatternParts:
-            if argsPattern.numberOfArgs() != -1:
-                argsPattern.validateArg(args[index:index + argsPattern.numberOfArgs()], index)
-                index += argsPattern.numberOfArgs()
+        for argsPattern in self.args_pattern_parts:
+            if argsPattern.number_of_args() != -1:
+                argsPattern.validate_arg(args[index:index + argsPattern.number_of_args()], index)
+                index += argsPattern.number_of_args()
             else:
-                argsPattern.validateArg(args[index:], index)
+                argsPattern.validate_arg(args[index:], index)
 
         return True
 
     def required_number_of_args(self) -> int:
-        sum = 0
-        for argsPattern in self.argsPatternParts:
-            if argsPattern.numberOfArgs() != -1:
-                sum += argsPattern.numberOfArgs()
-        return sum
+        sum_of_number_of_args = 0
+        for argsPattern in self.args_pattern_parts:
+            if argsPattern.number_of_args() != -1:
+                sum_of_number_of_args += argsPattern.number_of_args()
+        return sum_of_number_of_args
 
 
 class CreateCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            toId = await getIdFromName(message.server, message.author.name)
-            if toId != "":
+            to_id = await getIdFromName(message.server, message.author.name)
+            if to_id != "":
                 address = connector.create(message.author.id)
-                embed = Embed(description='<@%s>の"XSHアドレス"を作成したマジロ...' % (toId), type='rich', colour=0x6666FF)
+                embed = Embed(description='<@%s>の"XSHアドレス"を作成したマジロ...' % to_id, type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH Address', value=address)
                 embed.set_thumbnail(url='https://api.qrserver.com/v1/create-qr-code/?data=%s' % address)
                 await client.send_message(message.channel, embed=embed)
@@ -80,11 +79,11 @@ class CreateCommand(Command):
 class AddressCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            toId = await getIdFromName(message.server, message.author.name)
-            if toId != "":
+            to_id = await getIdFromName(message.server, message.author.name)
+            if to_id != "":
                 address = connector.address(message.author.id)
                 if address != "":
-                    embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
+                    embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % to_id, type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
                     embed.set_thumbnail(url='https://api.qrserver.com/v1/create-qr-code/?data=%s' % address)
                     await client.send_message(message.channel, embed=embed)
@@ -100,11 +99,11 @@ class AddressCommand(Command):
 class DepositCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            toId = await getIdFromName(message.server, message.author.name)
-            if toId != "":
+            to_id = await getIdFromName(message.server, message.author.name)
+            if to_id != "":
                 address = connector.address(message.author.id)
                 if address != "":
-                    embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % (toId), type='rich', colour=0x6666FF)
+                    embed = Embed(description='<@%s>の"XSHアドレス"マジ...' % to_id, type='rich', colour=0x6666FF)
                     embed.add_field(name='XSH Address', value=address)
                     embed.set_thumbnail(url='https://api.qrserver.com/v1/create-qr-code/?data=%s' % address)
                     await client.send_message(message.channel, embed=embed)
@@ -120,13 +119,13 @@ class DepositCommand(Command):
 class BalanceCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            toId = await getIdFromName(message.server, message.author.name)
-            if toId != "":
-                priceJPY = await current_price_jpy()
+            to_id = await getIdFromName(message.server, message.author.name)
+            if to_id != "":
+                price_jpy = get_price_jpy_per_xsh()
                 balance = connector.balance(message.author.id)
-                embed = Embed(description='<@%s>の"所持XSH数"を表示するマジロ...。' % (toId), type='rich', colour=0x6666FF)
+                embed = Embed(description='<@%s>の"所持XSH数"を表示するマジロ...。' % to_id, type='rich', colour=0x6666FF)
                 embed.add_field(name='XSH所持数', value='%.08f XSH' % balance, inline=True)
-                embed.add_field(name='日本円換算', value='%0.04f 円' % (priceJPY * balance), inline=True)
+                embed.add_field(name='日本円換算', value='%0.04f 円' % (price_jpy * balance), inline=True)
                 await client.send_message(message.channel, embed=embed)
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
@@ -141,12 +140,18 @@ class WithdrawCommand(Command):
             if float(args[1]) < 1:
                 await client.send_message(message.channel, "引き出しは1XSHからマジ...")
                 return
-            feePercent = Decimal(0.1) / Decimal(args[1]) if Decimal(args[1]) * Decimal('0.05') / Decimal(100) < Decimal('0.1') else Decimal('0.05') / Decimal(100)
-            amount = connector.send(message.author.id, args[0], Decimal(args[1]), feePercent)
-            toId = await getIdFromName(message.server, message.author.name)
-            if toId != "":
+
+            if Decimal(args[1]) * Decimal('0.0005') < Decimal('0.1'):
+                fee_percent = Decimal(0.1) / Decimal(args[1])
+            else:
+                fee_percent = Decimal('0.05') / Decimal(100)
+
+            amount = connector.send(message.author.id, args[0], Decimal(args[1]), fee_percent)
+            to_id = await getIdFromName(message.server, message.author.name)
+            if to_id != "":
                 await mention(client, message.channel, message.author.name,
-                              '"%s"に"%f XSH"送金したマジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)' % (args[0], float(amount), float(Decimal(args[1]) - amount)))
+                              '"%s"に"%f XSH"送金したマジ...確認してマジ...(txfee: 0.05XSH～(送金額により変動), 手数料: %fXSH)'
+                              % (args[0], float(amount), float(Decimal(args[1]) - amount)))
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
@@ -155,9 +160,9 @@ class WithdrawCommand(Command):
 
 
 class TipCommand(Command):
-
-    def __parse_id(self, message: str):
-        regex = re.compile(r'\<@\!*([0-9]*)\>')
+    @staticmethod
+    def __parse_id(message: str):
+        regex = re.compile(r'<@!*([0-9]*)>')
         if not regex.match(message):
             return ''
 
@@ -165,19 +170,19 @@ class TipCommand(Command):
 
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
-            fromId = message.author.id
-            destId = self.__parse_id(args[0])
-            if args[0].upper() == 'DONATE' or destId == '413715025178525706':
-                destId = 'DONATE'
+            from_id = message.author.id
+            dest_id = self.__parse_id(args[0])
+            if args[0].upper() == 'DONATE' or dest_id == '413715025178525706':
+                dest_id = 'DONATE'
             if args[0].upper() == 'RAIN_WALLET':
-                destId = 'RAIN_WALLET'
+                dest_id = 'RAIN_WALLET'
 
-            if destId != "":
-                if fromId != "":
-                    feePercent = Decimal('0.002') / Decimal(100)
-                    connector.tip(message.author.id, destId, Decimal(args[1]), feePercent)
+            if dest_id != "":
+                if from_id != "":
+                    fee_percent = Decimal('0.002') / Decimal(100)
+                    connector.tip(message.author.id, dest_id, Decimal(args[1]), fee_percent)
                     await mention(client, message.channel, message.author.name,
-                                  'から<@%s>に"%f XSH"送金したマジ...(手数料: %f％)' % (destId, float(args[1]), feePercent * 100))
+                                  'から<@%s>に"%f XSH"送金したマジ...(手数料: %f％)' % (dest_id, float(args[1]), fee_percent * 100))
             else:
                 await client.send_message(message.channel, "%sなんていないマジ..." % args[0])
         except APIError as err:
@@ -188,9 +193,8 @@ class TipCommand(Command):
 
 
 class RainCommand(Command):
-
-    def __init__(self, cmdLabel: str, argsPatternParts: Sequence[ArgsPatternPart], roomList : Sequence[str] = None):
-        super().__init__(cmdLabel, argsPatternParts, roomList)
+    def __init__(self, cmd_label: str, arg_pattern_parts: Sequence[ArgsPatternPart], room_list: Sequence[str] = None):
+        super().__init__(cmd_label, arg_pattern_parts, room_list)
         self.last_fetched: datetime = None
         self.wallet_list = None
         self.fetching_interval = 300
@@ -198,37 +202,50 @@ class RainCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         try:
             amount = float(args[0])
-            number_of_people = int(args[1]) if len(args) >= 2 else -1
+            number_of_people = int(float(args[1])) if len(args) >= 2 else -1
             if amount < 0.05:
                 await client.send_message(message.channel,
                                           'こんなんじゃうまく雨が降らないマジ... 0.05XSH以上は欲しいマジよ...')
                 return
 
-            if not await self.balance_is_more_than(message.author.id, amount):
+            if not self.balance_is_more_than(message.author.id, amount):
                 await client.send_message(message.channel,
                                           '所持"XSH"が足りないマジ...。残高は%fマジよ...' % connector.balance(message.author.id))
                 return
 
-            onlineMembersId = [member.id for member in message.server.members if member.status != discord.Status.offline] # オンラインの人のID取得
-            ownerIdListOfWallets = [wallet['name'] for wallet in self.get_wallet_list() if float(wallet['balance']) >= 1] # ウォレット一覧取得(残高が1XSH以上)
-            onlineMembersIdWhoHasWallet = [memberId for memberId in onlineMembersId if memberId in ownerIdListOfWallets] # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
+            # オンラインの人のID取得
+            online_members_id = [member.id for member in message.server.members
+                                 if member.status != discord.Status.offline]
 
+            # ウォレット一覧取得(残高が1XSH以上)
+            owner_id_list_of_wallets = [wallet['name'] for wallet in self.get_wallet_list()
+                                        if float(wallet['balance']) >= 1]
+
+            # オンラインの人の中から、ウォレットを持ってる人のID一覧取得
+            online_members_id_who_has_wallet = [member_id for member_id in online_members_id
+                                                if member_id in owner_id_list_of_wallets]
+
+            # 宝くじrain用の処理
             if number_of_people > 0:
-                onlineMembersIdWhoHasWallet = random.sample(
-                    min([len(onlineMembersIdWhoHasWallet), number_of_people]),
-                    number_of_people)
+                online_members_id_who_has_wallet = random.sample(
+                    online_members_id_who_has_wallet,
+                    min(len(online_members_id_who_has_wallet), number_of_people))
 
-            pricePerOne = Decimal(amount) / Decimal(len(onlineMembersIdWhoHasWallet))
-            connector.rain(message.author.id, onlineMembersIdWhoHasWallet, pricePerOne, Decimal(0))
-            toId = await getIdFromName(message.server, message.author.name)
+            price_per_one = Decimal(amount) / Decimal(len(online_members_id_who_has_wallet))
+
+            connector.rain(message.author.id, online_members_id_who_has_wallet, price_per_one, Decimal(0))
+
+            to_id = await getIdFromName(message.server, message.author.name)
 
             await client.send_message(message.channel,
-                                      '<@%s> から"%f XSH"を受け取ったマジ...%d人に"%.04f XSH"ずつあげたマジ...' % (toId, amount, len(onlineMembersIdWhoHasWallet), pricePerOne))
+                                      '<@%s> から"%f XSH"を受け取ったマジ...%d人に"%.04f XSH"ずつあげたマジ...' % (
+                                          to_id, amount, len(online_members_id_who_has_wallet), price_per_one))
         except APIError as err:
             await client.send_message(message.channel, "ERROR: %s" % err.message)
 
-    async def balance_is_more_than(self, id: str, amount: float):
-        if (connector.balance(id)) >= amount:
+    @staticmethod
+    def balance_is_more_than(wallet_id: str, amount: float):
+        if (connector.balance(wallet_id)) >= amount:
             return True
         return False
 
@@ -253,18 +270,18 @@ class RainCommand(Command):
 class InfoCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         amount = float(args[0]) if len(args) > 0 else 1
-        price = await current_price_jpy()
-        priceBTC = await current_price_btc()
+        price = get_price_jpy_per_xsh()
+        price_btc = get_price_btc_per_xsh()
         embed = Embed(type='rich', colour=0xF7D358)
-        embed.add_field(name="BTC/XSH", value="%.08f BTC/XSH" % priceBTC, inline=True)
+        embed.add_field(name="BTC/XSH", value="%.08f BTC/XSH" % price_btc, inline=True)
         embed.add_field(name="JPY/XSH", value="%.08f JPY/XSH" % price, inline=True)
         if amount != 1:
             embed.add_field(name="ㅤ", value="ㅤ", inline=False)
-            embed.add_field(name="%.04f BTC/XSH" % amount, value="%.08f BTC/XSH" % (priceBTC * amount), inline=True)
+            embed.add_field(name="%.04f BTC/XSH" % amount, value="%.08f BTC/XSH" % (price_btc * amount), inline=True)
             embed.add_field(name="%.04f JPY/XSH" % amount, value="%.08f JPY/XSH" % (price * amount), inline=True)
         embed.set_footer(text='https://coinmarketcap.com/currencies/shield-xsh/')
         embed.set_thumbnail(
-            url='http://files.coinmarketcap.com.s3-website-us-east-1.amazonaws.com/static/img/coins/200x200/shield-xsh.png')
+            url=xsh_thumbnail)
         await client.send_message(message.channel, embed=embed)
 
     def help(self):
@@ -274,16 +291,16 @@ class InfoCommand(Command):
 class HowMuchCommand(Command):
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         amount = float(args[0]) if len(args) > 0 else 1
-        price = await current_price_jpy()
-        priceBTC = await current_price_btc()
+        price = get_price_jpy_per_xsh()
         embed = Embed(type='rich', colour=0xF7D358)
         embed.add_field(name="XSH/JPY", value="%.08f XSH/1 JPY" % (1 / price), inline=True)
         if amount != 1:
             embed.add_field(name="ㅤ", value="ㅤ", inline=False)
-            embed.add_field(name="How Much?", value="%.04f XSH/%.04f JPY" % ( ((1/price) * amount), amount ), inline=True)
+            embed.add_field(name="How Much?", value="%.04f XSH/%.04f JPY" % (((1 / price) * amount), amount),
+                            inline=True)
         embed.set_footer(text='https://coinmarketcap.com/currencies/shield-xsh/')
         embed.set_thumbnail(
-            url='http://files.coinmarketcap.com.s3-website-us-east-1.amazonaws.com/static/img/coins/200x200/shield-xsh.png')
+            url=xsh_thumbnail)
         await client.send_message(message.channel, embed=embed)
 
     def help(self):
@@ -307,25 +324,25 @@ class TranslateENIntoJPCommand(Command):
 
 
 class DiceRainCommand(Command):
-
-    dicerainInstance = None
+    dice_rain_instance = None
 
     async def execute(self, args: Sequence[str], client, message: discord.Message):
         pass
 
     def help(self):
-        return ",dicerain (amount) (people num) (border) - 指定された人数に、一人当り(amount)/(people num) XSHを、diceの値が(border)以上の人にプレゼントします。diceででる値は0-100です。最大試行数は"
+        return ",dicerain (amount) (people num) (border) - " \
+               "指定された人数に、一人当り(amount)/(people num) XSHを、diceの値が(border)以上の人にプレゼントします。" \
+               "diceででる値は0-100です。最大試行数は"
 
 
 class DiscordIDCommand(Command):
-
     async def execute(self, args: Sequence[str], client, message: discord.Message):
-        def __parse_id(message: str):
-            regex = re.compile(r'\<@\!*([0-9]*)\>')
-            if not regex.match(message):
+        def __parse_id(chat_message: str):
+            regex = re.compile(r'<@!*([0-9]*)>')
+            if not regex.match(chat_message):
                 return ''
 
-            return regex.search(message).group(1)
+            return regex.search(chat_message).group(1)
 
         await client.send_message(message.channel, __parse_id(args[0]))
 

@@ -4,21 +4,20 @@ from abc import ABCMeta, abstractmethod
 
 
 class ArgsPatternPart(metaclass=ABCMeta):
-
     @abstractmethod
-    def numberOfArgs(self) -> int:
+    def number_of_args(self) -> int:
         raise NotImplementedError()
 
     @abstractmethod
-    def validateArg(self, args : Sequence[str], index : int) -> bool:
+    def validate_arg(self, args: Sequence[str], index: int) -> bool:
         raise NotImplementedError()
 
 
 # コマンドの引数の長さが一致しなかった時に発生させる例外です
 class CommandLengthDoesntMatchException(Exception):
-    def __init__(self, length : int, help : str):
+    def __init__(self, length: int, help_message: str):
         self.length = length
-        self.help = help
+        self.help_message = help_message
 
     def __str__(self):
         return "このコマンドは、少なくとも%d個の引数が必要です!" % self.length
@@ -26,7 +25,7 @@ class CommandLengthDoesntMatchException(Exception):
 
 # コマンドのパターンが一致しなかった時に発生させる例外です
 class CommandArgsPatternDoesntMatchException(Exception):
-    def __init__(self, message : str):
+    def __init__(self, message: str):
         self.message = message
 
     def __str__(self):
@@ -34,16 +33,15 @@ class CommandArgsPatternDoesntMatchException(Exception):
 
 
 class NumberArgsPattern(ArgsPatternPart):
+    def __init__(self, number_of_args_=1):
+        self.number_of_args_ = number_of_args_
 
-    def __init__(self, numberOfArgs_=1):
-        self.numberOfArgs_ = numberOfArgs_
+    def number_of_args(self):
+        return self.number_of_args_
 
-    def numberOfArgs(self):
-        return self.numberOfArgs_
-
-    def validateArg(self, args : Sequence[str], index : int):
+    def validate_arg(self, args: Sequence[str], index: int):
+        i = 0
         try:
-            i = 0
             for arg in args:
                 float(arg)
             i += 1
@@ -54,14 +52,13 @@ class NumberArgsPattern(ArgsPatternPart):
 
 
 class PositiveNumberArgsPattern(ArgsPatternPart):
+    def __init__(self, number_of_args_=1):
+        self.number_of_args_ = number_of_args_
 
-    def __init__(self, numberOfArgs_=1):
-        self.numberOfArgs_ = numberOfArgs_
+    def number_of_args(self):
+        return self.number_of_args_
 
-    def numberOfArgs(self):
-        return self.numberOfArgs_
-
-    def validateArg(self, args : Sequence[str], index : int):
+    def validate_arg(self, args: Sequence[str], index: int):
         try:
             i = 0
             for arg in args:
@@ -76,29 +73,27 @@ class PositiveNumberArgsPattern(ArgsPatternPart):
 
 
 class StringArgsPattern(ArgsPatternPart):
-
-    def __init__(self, s : str):
+    def __init__(self, s: str):
         self.s = s
 
-    def numberOfArgs(self):
+    def number_of_args(self):
         return 1
 
-    def validateArg(self, args : Sequence[str], index : int):
+    def validate_arg(self, args: Sequence[str], index: int):
         if args[0] != self.s:
             raise CommandArgsPatternDoesntMatchException("%d番目の引数は「%s」である必要があります!" % (index + 1, self.s))
         return True
 
 
 class RegexArgsPattern(ArgsPatternPart):
+    def __init__(self, regex_str: str, error_message: str):
+        self.regex = re.compile(regex_str)
+        self.err_message = error_message
 
-    def __init__(self, regexStr : str, errorMessage : str):
-        self.regex = re.compile(regexStr)
-        self.errMessage = errorMessage
-
-    def numberOfArgs(self):
+    def number_of_args(self):
         return 1
 
-    def validateArg(self, args : Sequence[str], index : int):
+    def validate_arg(self, args: Sequence[str], index: int):
         if not self.regex.match(args[0]):
-            raise CommandArgsPatternDoesntMatchException("%d番目の引数に問題があります! - %s" % (index + 1, self.errMessage))
+            raise CommandArgsPatternDoesntMatchException("%d番目の引数に問題があります! - %s" % (index + 1, self.err_message))
         return True
