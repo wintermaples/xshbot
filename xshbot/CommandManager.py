@@ -1,11 +1,12 @@
 import discord
-
+from logging import getLogger
 
 class CommandManager:
-    commands = list()
 
     def __init__(self, cmd_prefix: str):
         self.cmd_prefix = cmd_prefix
+        self.commands = list()
+        self.logger = getLogger(__name__)
 
     async def execute(self, cmd_str: str, client, message: discord.Message):
         # 全角でも認識できるようにする
@@ -28,6 +29,6 @@ class CommandManager:
             if command.room_list is not None and message.channel.name not in command.room_list:
                 continue
             if command.is_match(cmd_label, args):
-                print("Executed %s command." % command.cmd_label)
+                self.logger.info(f'Executed {command.cmd_label} command.')
                 await command.execute(args, client, message)
                 return True

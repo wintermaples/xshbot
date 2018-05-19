@@ -7,10 +7,13 @@ from xshbot import APIConnector
 from xshbot.community_event.april_28_fullmoon_party import fullmoon_party
 import json
 import datetime
+from logging import getLogger
 
 client = discord.Client()
 
 cmdManager = xshbot.CommandManager(",")
+
+logger = getLogger(__name__)
 
 
 @client.event
@@ -26,7 +29,7 @@ async def on_message(message: discord.Message):
             await client.send_message(message.channel, str(ex))
             await client.send_message(message.channel, "HELP: " + ex.help_message)
     except Exception:
-        print(traceback.format_exc())
+        logger.error(traceback.format_exc())
 
 cmdManager.commands.append(
     xshbot.CreateCommand(
