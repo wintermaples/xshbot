@@ -4,16 +4,18 @@ import xshbot
 import traceback
 import threading
 from xshbot import APIConnector
-from xshbot.community_event.april_28_fullmoon_party import fullmoon_party
+from xshbot.community_event.fullmoon_party import fullmoon_party
 import json
 import datetime
-from logging import getLogger
+from logging import DEBUG
+from xshbot.util.logging import StreamLoggerFactory
+import DiscordUtil
 
 client = discord.Client()
 
 cmdManager = xshbot.CommandManager(",")
 
-logger = getLogger(__name__)
+logger = StreamLoggerFactory.create(__name__, DEBUG)
 
 
 @client.event
@@ -29,13 +31,15 @@ async def on_message(message: discord.Message):
             await client.send_message(message.channel, str(ex))
             await client.send_message(message.channel, "HELP: " + ex.help_message)
     except Exception:
+        print('Error')
         logger.error(traceback.format_exc())
 
 cmdManager.commands.append(
     xshbot.CreateCommand(
         "register",
         [],
-        ['ウォレット作成（register）']
+        ['ウォレット作成（register）'],
+        can_execute_on_DM=True
     )
 )
 
@@ -44,7 +48,8 @@ cmdManager.commands.append(
     xshbot.AddressCommand(
         "address",
         [],
-        ['アドレス確認・入金（address_deposit）']
+        ['アドレス確認・入金（address_deposit）'],
+        can_execute_on_DM=True
     )
 )
 
@@ -52,7 +57,8 @@ cmdManager.commands.append(
     xshbot.DepositCommand(
         "deposit",
         [],
-        ['アドレス確認・入金（address_deposit）']
+        ['アドレス確認・入金（address_deposit）'],
+        can_execute_on_DM=True
     )
 )
 
@@ -60,7 +66,8 @@ cmdManager.commands.append(
     xshbot.BalanceCommand(
         "balance",
         [],
-        ['残高確認・出金（balance_withdraw）']
+        ['残高確認・出金（balance_withdraw）'],
+        can_execute_on_DM=True
     )
 )
 
@@ -68,10 +75,11 @@ cmdManager.commands.append(
     xshbot.WithdrawCommand(
         "withdraw",
         [
-            xshbot.RegexArgsPattern("S[a-zA-Z0-9]{23}", "アドレスの形式が不正です!"),
+            xshbot.RegexArgsPattern("(S[a-zA-Z0-9]{23})|(E[a-zA-Z0-9]{33})|(s[a-zA-Z0-9]{41})", "アドレスの形式が不正です!"),
             xshbot.PositiveNumberArgsPattern()
         ],
-        ['残高確認・出金（balance_withdraw）']
+        ['残高確認・出金（balance_withdraw）'],
+        can_execute_on_DM=True
     )
 )
 
@@ -91,7 +99,6 @@ cmdManager.commands.append(
         "rain",
         [
             xshbot.PositiveNumberArgsPattern(),
-            xshbot.PositiveNumberArgsPattern(number_of_args_=-1)
         ],
         ['イベントルーム', 'xshトーク部屋', 'フリートーク部屋', '技術部屋','チャート部屋','マイニング部屋','質問部屋','商品開発班','イベント班','翻訳班','イラスト班','wiki班','bot開発班', 'フルムーンビーチ','居酒屋しぃるど',]
     )
@@ -138,7 +145,8 @@ cmdManager.commands.append(
 cmdManager.commands.append(
     xshbot.DiscordIDCommand(
         "getuniqueid",
-        list()
+        [],
+        ['価格確認（info）']
     )
 )
 

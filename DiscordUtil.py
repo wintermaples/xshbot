@@ -1,21 +1,30 @@
 import discord
 
-async def getIdFromName(server : discord.Server, name : str) -> str:
+
+async def get_id_from_name(server : discord.Server, name : str) -> str:
     for member in server.members:
         if member.name == name:
             return member.id
     return ""
 
-async def getDiscriminatorFromName(server : discord.Server, name : str) -> str:
+
+async def get_discriminator_from_name(server : discord.Server, name : str) -> str:
     for member in server.members:
         if member.name == name:
             return member.discriminator
     return ""
 
-async def mention(client, dist, name : str, message : str) -> bool:
-    toId = await getIdFromName(dist.server, name)
-    if toId != "":
-        await client.send_message(dist, "<@" + toId + "> " + message)
+
+async def mention(client, dist_channel: discord.Channel, dist_user: discord.User, message: str, embed=None):
+    await client.send_message(dist_channel, "<@" + dist_user.id + "> " + message, embed=embed)
+
+
+async def dm(client: discord.Client, dist_user: discord.User, message: str, embed=None):
+    await client.send_message(dist_user, message, embed=embed)
+
+
+async def dm_or_mention(client: discord.Client, dist_channel: discord.Channel, dist_user: discord.User, message:str, embed=None):
+    if dist_channel.type is discord.ChannelType.private:
+        await dm(client, dist_user, message, embed=embed)
     else:
-        return False
-    return True
+        await mention(client, dist_channel, dist_user, message, embed=embed)

@@ -3,6 +3,7 @@ import threading
 import datetime
 import time
 import asyncio
+import xshbot.Commands
 
 class FullMoonParty():
 
@@ -15,7 +16,7 @@ class FullMoonParty():
 class RainEventStartScheduler(threading.Thread):
     def __init__(self):
         super(RainEventStartScheduler, self).__init__()
-        self.start_date_time = datetime.datetime(2018, 4, 28, 22, 0, 0)
+        self.start_date_time = datetime.datetime(2018, 5, 26, 22, 0, 0)
 
     def run(self):
         while True:
@@ -25,26 +26,26 @@ class RainEventStartScheduler(threading.Thread):
             time.sleep(1)
 
     def rain(self):
-        wallet_list = APIConnector.list('')
+        wallet_list = xshbot.Commands.connector.list()
         balance_0_wallet_list = [wallet for wallet in wallet_list if wallet['balance'] < 1.0]
         for wallet in balance_0_wallet_list:
-            APIConnector.tip('', 'RAIN_WALLET', wallet['name'], 1, 0)
+            xshbot.Commands.connector.tip('RAIN_WALLET', wallet['name'], 1, 0)
 
 
 class RainEventScheduler():
     def __init__(self):
-        self.start_date_time = datetime.datetime(2018, 4, 28, 22, 0, 20)
+        self.start_date_time = datetime.datetime(2018, 5, 26, 22, 0, 20)
         self.excluded_users = set()
 
     async def task(self, client):
         await client.wait_until_ready()
         while not client.is_closed:
             if datetime.datetime.now() > self.start_date_time:
-                wallets = APIConnector.list('')
+                wallets = xshbot.Commands.connector.list()
                 newUserWallets = [wallet for wallet in wallets if
                                   not wallet['name'] in self.excluded_users and wallet['balance'] < 1.0]
                 for newUserWallet in newUserWallets:
-                    APIConnector.tip('', 'RAIN_WALLET', newUserWallet['name'], 1, 0)
+                    xshbot.Commands.connector.tip('RAIN_WALLET', newUserWallet['name'], 1, 0)
                 for wallet in wallets:
                     self.excluded_users.add(wallet['name'])
 

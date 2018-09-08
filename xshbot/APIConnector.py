@@ -114,7 +114,7 @@ class APIConnector:
                 "from": name,
                 "to": dest_list,
                 "amount": str(price_per_one),
-                "feePercent": str(price_per_one)
+                "feePercent": str(fee_percent)
             }
         jsondata =  self.__post_to_api("wallet/rain/", params)
         data = json.loads(jsondata)
