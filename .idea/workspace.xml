@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4bad7a8c-c628-4542-b4b9-88b0ba4b9135" name="Default" comment="RAINの致命的なバグ修正" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/xshbot$main.coverage" NAME="main Coverage Results" MODIFIED="1530811211247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/xshbot$tmain.coverage" NAME="tmain Coverage Results" MODIFIED="1519441858023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/xshbot" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1162054986">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="9" />
+          <entry key="project.open.time.0" value="4" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.4" value="2" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="10" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="21" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="21" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="86" />
+          <entry key="txt" value="13" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="PLAIN_TEXT" value="13" />
+          <entry key="Python" value="86" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.js.language.service.starts" />
+      <usages-collector id="statistics.vcs.git.usages" />
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/xshbot/Commands.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="331">
+              <caret line="207" column="79" lean-forward="true" selection-start-line="207" selection-start-column="79" selection-end-line="207" selection-end-column="79" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>GRIM</find>
+      <find>XSHa</find>
+      <find>curr</find>
+      <find>= json</find>
+      <find>_postToAPI</find>
+      <find>getIdFrom</find>
+      <find>get</find>
+      <find>getDis</find>
+      <find>await</find>
+      <find>await APIConnector</find>
+      <find>'tip_rain_room'</find>
+      <find>'chat_room'</find>
+      <find>'shield_bot'</find>
+      <find>discord.client</find>
+      <find>discord_client</find>
+      <find>awa</find>
+      <find>message: discord.Message</find>
+      <find>balance</find>
+      <find>mention</find>
+      <find>BalanceComm</find>
+      <find>Withdra</find>
+      <find>Address</find>
+      <find>Balance</find>
+      <find>RainComm</find>
+      <find>Rain</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>XSH</replace>
+      <replace>= await json</replace>
+      <replace>await _postToAPI</replace>
+      <replace>APIConnector</replace>
+      <replace>'address_deposit（アドレス確認・入金）'</replace>
+      <replace>'イベントルーム'</replace>
+      <replace>'雑談部屋'</replace>
+      <replace>'価格確認（info）'</replace>
+      <replace>client</replace>
+      <replace>message: discord.Message, is_dm: bool</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Translator.py" />
+        <option value="$PROJECT_DIR$/xshbot/DiceRain.py" />
+        <option value="$PROJECT_DIR$/xshbot/test.py" />
+        <option value="$PROJECT_DIR$/xshbot/testaaa.py" />
+        <option value="$PROJECT_DIR$/xshbot/tmain.py" />
+        <option value="$PROJECT_DIR$/xshbot/special/3_3_rain_event.py" />
+        <option value="$PROJECT_DIR$/xshbot/special/march_3_rain_event.py" />
+        <option value="$PROJECT_DIR$/xshbot/community_event.py" />
+        <option value="$PROJECT_DIR$/xshbot/community_event/march_31_fullmoon_party/auto_give_xsh_to_new_user.py" />
+        <option value="$PROJECT_DIR$/xshbot/community_event/march_31_fullmoon_party/fullmoon_party.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/xshbot/community_event/april_28_fullmoon_party/fullmoon_party.py" />
+        <option value="$PROJECT_DIR$/SHIELDdConnectorAPIToken.txt" />
+        <option value="$PROJECT_DIR$/xshbot/pinbot/pinbot.py" />
+        <option value="$PROJECT_DIR$/XSHUtil.py" />
+        <option value="$PROJECT_DIR$/xshbot/CmdPatterns.py" />
+        <option value="$PROJECT_DIR$/xshbot/util/logging.py" />
+        <option value="$PROJECT_DIR$/xshbot/community_event/fullmoon_party/fullmoon_party.py" />
+        <option value="$PROJECT_DIR$/DiscordUtil.py" />
+        <option value="$PROJECT_DIR$/xshbot/CommandManager.py" />
+        <option value="$PROJECT_DIR$/xshbot/APIConnector.py" />
+        <option value="$PROJECT_DIR$/xshbot/Commands.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="368" />
+    <option name="y" value="-8" />
+    <option name="width" value="1087" />
+    <option name="height" value="714" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="xshbot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xshbot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xshbot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="community_event" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xshbot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="community_event" type="462c0819:PsiDirectoryNode" />
+              <item name="fullmoon_party" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xshbot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="xshbot" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="C:/ProgramData/Anaconda3/Scripts/conda.exe" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Users\wintermaples\Documents\Programming\python\xshbot" />
+      <recent name="D:\Users\wintermaples\Documents\Programming\python\xshbot\testdir" />
+      <recent name="D:\Users\wintermaples\Google ドライブ\プログラミング\python\xshbot" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="xshbot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tmain" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="xshbot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/xshbot" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xshbot/tmain.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.tmain" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.tmain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4bad7a8c-c628-4542-b4b9-88b0ba4b9135" name="Default" comment="" />
+      <created>1514963933879</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1514963933879</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Initial Commit.">
+      <created>1518246661778</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1518246661778</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Rainの受け取り条件を残高5XSH以上から1XSH以上に変更">
+      <created>1519059656021</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1519059656021</updated>
+    </task>
+    <task id="LOCAL-00003" summary="3/3のイベント用に改造">
+      <created>1519823038872</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1519823038872</updated>
+    </task>
+    <task id="LOCAL-00004" summary="3/3のイベント用のやつ削除">
+      <created>1520220360421</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1520220360421</updated>
+    </task>
+    <task id="LOCAL-00005" summary="チャンネルの日本語化に対応">
+      <created>1520258469975</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1520258469975</updated>
+    </task>
+    <task id="LOCAL-00006" summary="3/31のFullMoonParty用に仕込んだ">
+      <created>1521965235282</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1521965235286</updated>
+    </task>
+    <task id="LOCAL-00007" summary="誤字修正&#10;新チャンネル名に対応">
+      <created>1524491732080</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1524491732080</updated>
+    </task>
+    <task id="LOCAL-00008" summary="ユーザビリティアップデート&#10;・tipがメンションでできるように変更&#10;・半角全角スペースを区別しないように変更&#10;・コマンドの間にスペースをいくつか含ませても大丈夫なように変更&#10;&#10;その他&#10;フルムーンパーティ用に仕込んだ">
+      <created>1524905244942</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1524905244942</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Pinbotぶっこんだ">
+      <created>1526202398811</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1526202398811</updated>
+    </task>
+    <task id="LOCAL-00010" summary="パフォーマンス計測用ソースを消した。&#10;エラーコードを追加">
+      <created>1526215675765</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1526215675765</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Rainのパフォーマンスを、WalletListをキャッシュすることで多少改善">
+      <created>1526321712167</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1526321712167</updated>
+    </task>
+    <task id="LOCAL-00012" summary="くじ引きrain実装">
+      <created>1526375099579</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1526375099579</updated>
+    </task>
+    <task id="LOCAL-00013" summary="くじ引きrain実装">
+      <created>1526375246627</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1526375246627</updated>
+    </task>
+    <task id="LOCAL-00014" summary="ソースコードを整形した">
+      <created>1526595782269</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1526595782269</updated>
+    </task>
+    <task id="LOCAL-00015" summary="loggerを使うようにした">
+      <created>1526730563620</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1526730563620</updated>
+    </task>
+    <task id="LOCAL-00016" summary="RAINの致命的なバグ修正">
+      <created>1536402764770</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1536402764770</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15671642" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.24973376" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="0" sideWeight="0.49361023" weight="0.32855567" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.47337595" weight="0.32928178" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4452954" weight="0.32233223" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4877529" weight="0.39889503" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="8" sideWeight="0.5547046" side_tool="true" visible="true" weight="0.22451194" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4978701" weight="0.3296582" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.4978701" weight="0.3296582" />
+      <window_info anchor="bottom" id="YouTrack" order="14" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="Data View" order="5" />
+      <window_info anchor="right" x="0" y="0" width="434" height="856" id="Documentation" order="6" side_tool="true" visible="true" weight="0.32995737" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial Commit." />
+    <MESSAGE value="Rainの受け取り条件を残高5XSH以上から1XSH以上に変更" />
+    <MESSAGE value="3/3のイベント用に改造" />
+    <MESSAGE value="3/3のイベント用のやつ削除" />
+    <MESSAGE value="チャンネルの日本語化に対応" />
+    <MESSAGE value="3/31のFullMoonParty用に仕込んだ" />
+    <MESSAGE value="誤字修正&#10;新チャンネル名に対応" />
+    <MESSAGE value="ユーザビリティアップデート&#10;・tipがメンションでできるように変更&#10;・半角全角スペースを区別しないように変更&#10;・コマンドの間にスペースをいくつか含ませても大丈夫なように変更&#10;&#10;その他&#10;フルムーンパーティ用に仕込んだ" />
+    <MESSAGE value="Pinbotぶっこんだ" />
+    <MESSAGE value="パフォーマンス計測用ソースを消した。&#10;エラーコードを追加" />
+    <MESSAGE value="Rainのパフォーマンスを、WalletListをキャッシュすることで多少改善" />
+    <MESSAGE value="くじ引きrain実装" />
+    <MESSAGE value="ソースコードを整形した" />
+    <MESSAGE value="loggerを使うようにした" />
+    <MESSAGE value="RAINの致命的なバグ修正" />
+    <option name="LAST_COMMIT_MESSAGE" value="RAINの致命的なバグ修正" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda3/Lib/site-packages/bitmex.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/json/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/testdir/testaaa.py" />
+    <entry file="file://$PROJECT_DIR$/xshbot/tmain.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/bitmex.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/discord/server.py" />
+    <entry file="file://$PROJECT_DIR$/xshbot/special/march_3_rain_event.py" />
+    <entry file="file://$PROJECT_DIR$/xshbot/community_event.py" />
+    <entry file="file://$PROJECT_DIR$/Translator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="39" column="29" lean-forward="true" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-427" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="1" column="35" selection-start-line="1" selection-start-column="35" selection-end-line="1" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grimapi_token.txt" />
+    <entry file="file://$PROJECT_DIR$/SHIELDdConnectorAPIToken.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="9" lean-forward="true" selection-start-column="9" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/pinbot/pinbot.py" />
+    <entry file="file://$PROJECT_DIR$/XSHUtil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/util/logging.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/discord/client.py" />
+    <entry file="file://$PROJECT_DIR$/xshbot/community_event/fullmoon_party/fullmoon_party.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/dicerain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DiscordUtil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="29" column="76" lean-forward="true" selection-start-line="29" selection-start-column="76" selection-end-line="29" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/CmdPatterns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="682">
+          <caret line="99" selection-start-line="99" selection-end-line="99" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="22" column="8" lean-forward="true" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/CommandManager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="30" column="61" selection-start-line="30" selection-start-column="61" selection-end-line="30" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/APIConnector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="65" column="93" lean-forward="true" selection-start-line="65" selection-start-column="93" selection-end-line="65" selection-end-column="93" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xshbot/Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="207" column="79" lean-forward="true" selection-start-line="207" selection-start-column="79" selection-end-line="207" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
